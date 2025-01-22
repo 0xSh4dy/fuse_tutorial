@@ -57,6 +57,7 @@ void fatal_error(const char *message)
     } while (0)
 
 #define min(x, y) ((x) < (y) ? (x) : (y))
+#define max(x, y) ((x) > (y) ? (x) : (y))
 
 static void init_handler(void *userdata, struct fuse_conn_info *conn)
 {
@@ -289,7 +290,7 @@ static void write_handler(fuse_req_t req, fuse_ino_t ino, const char *buf, size_
                 {
                     files[i].data = realloc(files[i].data, off + size);
                 }
-                files[i].size = off + size;
+                files[i].size = max(files[i].size, off + size);
                 memcpy(files[i].data + off, buf, size);
                 fuse_reply_write(req, size);
                 return;
